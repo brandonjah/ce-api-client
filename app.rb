@@ -7,8 +7,8 @@ class CeApiClient < Sinatra::Base
   end
 
   get '/' do
-    id = '8eea94464969021f753b749d0d6507e2'
-    secret = 'QDaB5k1a4Q4MdvbnkZ64v++AD9+izqJIxHR64jkef5jXDjRfOFdatizPuC7v5jby4AHIHAk/09WuWK1NB08mJA=2'
+    id = ENV['CE_API_ID']
+    secret = ENV['CE_API_SECRET']
 
     response = HTTParty.get( url_for('test') )
     
