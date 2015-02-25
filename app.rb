@@ -4,13 +4,14 @@ require 'environment'
 class CeApiClient < Sinatra::Base
   def url_for(path)
     File.join('https://ce-api.herokuapp.com/', path)
+    # File.join('http://localhost:9292/', path)
   end
 
   get '/' do
     id = ENV['CE_API_ID']
     secret = ENV['CE_API_SECRET']
 
-    response = HTTParty.get( url_for('test') )
+    # response = HTTParty.get( url_for('test') )
     
     client = Rack::OAuth2::Client.new(
       identifier: id,
