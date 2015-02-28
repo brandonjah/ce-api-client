@@ -7,6 +7,10 @@ class CeApiClient < Sinatra::Base
     # File.join('http://localhost:9292/', path)
   end
 
+  def apt_number
+    Random.rand
+  end
+
   get '/' do
     id = ENV['CE_API_ID']
     secret = ENV['CE_API_SECRET']
@@ -27,9 +31,18 @@ class CeApiClient < Sinatra::Base
     ) 
     # response = token.get "https://ce-api.herokuapp.com/test_authenticated"
     response = HTTParty.post("https://ce-api.herokuapp.com/score_by_address",
-      :query => { :address => { :street => "1234 Main st. Apt 2", :"zipcode" => "92109", :city => "San Diego", :state => "CA" }, :attributes => { :bedrooms => 7, :bathrooms => 1} },
+      :query => { :street => "1234 Main st. Apt #{apt_number}", :"zipcode" => "92109", :city => "San Diego", :state => "CA", 
+                  :bedrooms => 7, :bathrooms => 1, :usecode => "singlefamily", :finished_sqft => 2300, :yearbuilt => 1984, :heatingfuel => "elec" },
       :headers => {"Authorization" => "Bearer #{token.access_token}"}
     )
+    response.body
+  end
+
+  get '/score' do
+    # 'a6d97805fb30396f4970eeddbd160e3a'
+    response = HTTParty.get("https://ce-api.herokuapp.com/score?ceapikey=8ad7e79505edb2f2abeb37642622b153&street=1234 Main st. Apt #{apt_number}&zipcode=92109&city=Denver&state=CO&bedrooms=5&bathrooms=4&usecode=singlefamily&finished_sqft=2300&yearbuilt=1983&heatingfuel=elec",
+      :query => { :ceapikey => '8ad7e79505edb2f2abeb37642622b153', :street => "1234 Main st. Apt #{apt_number}", :"zipcode" => "92109", :city => "San Diego", :state => "CA", 
+                  :bedrooms => 7, :bathrooms => 1, :usecode => "singlefamily", :finished_sqft => 2300, :yearbuilt => 1984, :heatingfuel => "elec" })
     response.body
   end
 end
